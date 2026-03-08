@@ -11,14 +11,16 @@ if height >= 120:
     elif age <= 18:
         #"Please pay $7."
         bill += 7
+    elif 45 <= age <= 55:
+        bill += 0
     else:
         #"Please pay $12."
         bill += 12
-    photo = input("Do you want a photo taken? Please answer yes or no: ")
-    if photo == "yes":
-        bill += 3
-        print(f"Your total bill is {bill}$")
-    
-    print(f"Your total bill is {bill}$")
 else:
     print("Sorry, you have to grow taller before you can ride diz ride")
+    
+photo = input("Do you want a photo taken? Please answer yes or no: ")
+if photo == "yes":
+    bill += 3
+
+print(f"Your total bill is {bill}$")
