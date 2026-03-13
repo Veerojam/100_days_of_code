@@ -70,74 +70,36 @@ print(placeholder)
 # If lives goes down to 0, then the game should end, and it should print "You lose!"
 ### TODO-4.3: Print the ASCII art from the list 'stages' that corresponds to the current number of lives the user has remaining.
 
-#nr_of_guesses = 0
-
-correct_guess = []
+guessed_letters = []
 game_over = False
 lives = 6
 
 while not game_over:
 
     guess = input("Guess a letter: ").lower()
-    correct_guess.append(guess)
-
+    guessed_letters.append(guess)
+    
     display = ""
-    lives -= 1
 
     for letter in chosen_word:
-        if letter in correct_guess:
+        if letter in guessed_letters:
             display += letter
         else:
             display += "_"
 
-    #nr_of_guesses += 1
     print(display)
+
+    if guess not in chosen_word:
+        lives -=1
+        print(stages_reversed[lives])
 
     if "_" not in display:
         game_over = True
-        print("You win!")
+        print("\nYou win!")
 
     elif lives == 0:
         game_over = True
-        print("You lose!")
+        print("\nYou lose!")
     
-
-##### Angela's solution:
-
-# game_over = False
-# correct_letters = []
-
-# while not game_over:
-#     guess = input("Guess a letter: ").lower()
-
-#     display = ""
-
-#     for letter in chosen_word:
-#         if letter == guess:
-#             display += letter
-#             correct_letters.append(guess)
-#         elif letter in correct_letters:
-#             display += letter
-#         else:
-#             display += "_"
-
-#     print(display)
-
-#     if "_" not in display:
-#         game_over = True
-#         print("You win!")
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
