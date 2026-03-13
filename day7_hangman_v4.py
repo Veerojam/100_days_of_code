@@ -1,13 +1,63 @@
 
 import random
 
+stages = ['''
+  +---+
+  |   |
+      |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+      |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+  |   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|   |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+      |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ /    |
+      |
+=========''', '''
+  +---+
+  |   |
+  O   |
+ /|\  |
+ / \  |
+      |
+=========''']
+
+stages_reversed = stages[::-1] # Because the list was copied in the wrong order
+
 word_list = ["aardvark", "baboon", "camel"]
 
 chosen_word = random.choice(word_list)
 print(chosen_word)
-
-
-nr_of_guesses = 0
 
 # Print the nr of _ needed to display to the player
 placeholder = ""
@@ -15,29 +65,41 @@ for letter in chosen_word:
     placeholder += '_'
 print(placeholder)
 
-### TODO-3.1: Use a while loop to let the user guess again
-### TODO-3.2: Change the for loop so that you keep the previous correct letters in display
+### TODO-4.1: Create a variable called 'lives' to keep track of the number of lives left. Set 'lives' to equal 6.
+### TODO-4.2: If guess is not a letter in the chosen_word, reduce lives by 1.
+# If lives goes down to 0, then the game should end, and it should print "You lose!"
+### TODO-4.3: Print the ASCII art from the list 'stages' that corresponds to the current number of lives the user has remaining.
 
-guesses_so_far = []
+#nr_of_guesses = 0
+
+correct_guess = []
 game_over = False
+lives = 6
 
 while not game_over:
 
     guess = input("Guess a letter: ").lower()
-    guesses_so_far.append(guess)
+    correct_guess.append(guess)
+
     display = ""
+    lives -= 1
 
     for letter in chosen_word:
-        if letter in guesses_so_far:
+        if letter in correct_guess:
             display += letter
         else:
             display += "_"
-    nr_of_guesses += 1
+
+    #nr_of_guesses += 1
     print(display)
 
     if "_" not in display:
         game_over = True
         print("You win!")
+
+    elif lives == 0:
+        game_over = True
+        print("You lose!")
     
 
 ##### Angela's solution:
