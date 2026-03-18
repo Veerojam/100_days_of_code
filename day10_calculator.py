@@ -1,4 +1,18 @@
 
+ascii = '''
+__________
+| ________ |
+||12345678||            _            _       _             
+|""""""""""|           | |          | |     | |            
+|[M|#|C][-]|   ___ __ _| | ___ _   _| | __ _| |_ ___  _ __ 
+|[7|8|9][+]|  / __/ _` | |/ __| | | | |/ _` | __/ _ \| '__|
+|[4|5|6][x]| | (_| (_| | | (__| |_| | | (_| | || (_) | |   
+|[1|2|3][%]|  \___\__,_|_|\___|\__,_|_|\__,_|\__\___/|_|   
+|[.|O|:][=]|
+"----------"
+'''
+
+print(ascii)
 
 def addition(n1, n2):
     return n1 + n2
@@ -13,7 +27,7 @@ def division(n1, n2):
     return n1 / n2
 
 
-math = {
+operations = {
     "+": addition,
     "-": subtraction,
     "*": multiplication,
@@ -32,7 +46,7 @@ while to_continue:
     choice = input(f"+\n-\n*\n/\nPick an operation: ")
     n2 = float(input("Please choose your second number: "))
 
-    result = math[choice](n1, n2)
+    result = operations[choice](n1, n2)
     print(f"\n{n1} {choice} {n2} = {result}")
 
     choice_continue = input(f"\nType 'y' to continue calculating with {result}, or type 'n' to start a new calculation: ")
