@@ -8,6 +8,8 @@ print(ascii)
 
 #want_to_play = input("Do you want to play a game of Blackjack? Type 'y' or 'n': ")
 
+cards_list = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
 player_cards = []
 computer_cards = []
 
@@ -17,11 +19,13 @@ def draw(list_name):
 
 
 draw(player_cards)
+draw(player_cards)
 draw(computer_cards)
+#draw(computer_cards)
 
 
 print(f"Your current hand: {player_cards}")
-print(f"Computer's current hand: {computer_cards}")
+print(f"Computer's first card: {computer_cards}")
 
 to_continue = True
 
@@ -60,3 +64,6 @@ while to_continue:
             print("You win!")
             to_continue = False
 
+
+### This version looks a lot prettier, but the blackjack logic is wrong:
+### each time the player draws, the computer draws too.
