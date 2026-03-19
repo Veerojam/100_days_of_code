@@ -4,6 +4,7 @@ continue_playing = True
 
 while continue_playing:
     want_to_play = input("Do you want to play a game of Blackjack? Type 'y' or 'n': ")
+    
     if want_to_play == 'n':
         continue_playing = False
 
@@ -34,19 +35,49 @@ while continue_playing:
 
         def draw(list_name):
             list_name.append(random.choice(cards_list))
+            # new_cards_sum = sum(new_cards)
+            # return new_cards_sum
+        
+        def status(state, winner = None):
+            
+            if state == "first":
+                print(f"Your first hand: {player_hand}, your current score: {sum(player_hand)}")
+                print(f"Computer's first cards: {computer_hand}, computer's currect score {sum(computer_hand)}")
+            
+            elif state == "ongoing":
+                print(f"Your current hand: {player_hand}, your current score: {sum(player_hand)}")
+                print(f"Computer's current hand: {computer_hand}, , computer's currect score {sum(computer_hand)}")
 
-        # First draw - player draws twice, computer draws once?
-        draw(player_hand)
-        draw(player_hand)
-        draw(computer_hand)
-        #draw(computer_hand
+            elif state == "finished" and winner == "computer":
 
-        print(f"Your current hand: {player_hand}, your current score: {sum(player_hand)}")
-        print(f"Computer's first card: {computer_hand}")
+                print(f"Your final hand: {player_hand}, your final score: {sum(player_hand)}")
+                print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
+                print("You lose!")
+            
+            elif state == "finished" and winner == "player":
+                print(f"Your final hand: {player_hand}, your final score: {sum(player_hand)}")
+                print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
+                print("You win!")
+            
+            else:
+                print(f"Your final hand: {player_hand}, your final score: {sum(player_hand)}")
+                print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
+                print("It's a draw!")
+                
+
+        for _ in range(2):
+            draw(player_hand)
+            draw(computer_hand)
+   
+
+        status("first")
 
         to_continue = True
 
         while to_continue:
+            
+            if len(player_hand) == 2 and sum(player_hand) == 21:
+                print("\nYour score: BLACKJACK!")
 
             another_card = input("Type 'y' to get another card, type 'n' to pass: \n")
 
@@ -57,56 +88,46 @@ while continue_playing:
 
                 if sum(computer_hand) > 21:
 
-                    print(f"Your final hand: {player_hand}, your final score: {sum(player_hand)}")
-                    print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
-                    print("Computer loses")
+                    status("finished", "player")
                 
                 elif sum(computer_hand) > sum(player_hand):
-                        print(f"\nYour final hand: {player_hand}, your final score: {sum(player_hand)}")
-                        print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
-                        print("You lose!")
+                        
+                        status("finished", "computer")
 
                 elif sum(player_hand) == sum(computer_hand):
                     
-                    print(f"Your final hand: {player_hand}, your final score: {sum(player_hand)}")
-                    print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
-                    print("It's a draw!")
+                    status("draw")
                 
                 else:
-                    
-                    print(f"Your final hand: {player_hand}, your final score: {sum(player_hand)}")
-                    print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
-                    print("You win!")
 
+                    status("finished", "player")
+                    
                 to_continue = False
 
             else: # continue = yes
                 draw(player_hand)
 
                 if sum(player_hand) > 21:
-                    if 11 in player_hand:
+                    if 11 in player_hand: #if 11 in hand and over 21, change it to 1.
                         location = player_hand.index(11)
                         player_hand[location] = 1
 
-                        print(f"Your current hand: {player_hand}, your current score: {sum(player_hand)}")
-                        print(f"Computer's current hand: {computer_hand}")
+                        status("ongoing")
 
                     else:
-                        print(f"\nYour final hand: {player_hand}, your final score: {sum(player_hand)}")
-                        print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
-                        print("You lose!")
+                        
+                        status("finished", "computer")
 
                         to_continue = False
 
                 elif sum(computer_hand) > 21:
 
-                    print(f"\nYour final hand: {player_hand}, your final score: {sum(player_hand)}")
-                    print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
-                    print("You win!")
+                    status("finished", "player")
 
                     to_continue = False
                 
                 else:
-                    print(f"Your current hand: {player_hand}, your current score: {sum(player_hand)}")
-                    print(f"Computer's current hand: {computer_hand}")
+                    
+                    status("ongoing")
+
 
