@@ -40,28 +40,21 @@ while continue_playing:
         
         def status(state, winner = None):
             
-            if state == "first":
-                print(f"Your first hand: {player_hand}, your current score: {sum(player_hand)}")
-                print(f"Computer's first cards: {computer_hand}, computer's currect score {sum(computer_hand)}")
-            
-            elif state == "ongoing":
-                print(f"Your current hand: {player_hand}, your current score: {sum(player_hand)}")
-                print(f"Computer's current hand: {computer_hand}, , computer's currect score {sum(computer_hand)}")
+            current_hands = f"Your current hand: {player_hand}, your current score: {sum(player_hand)}\nComputer's current hand: {computer_hand}, computer's current score {sum(computer_hand)}"
+
+            if state == "ongoing":
+                print(current_hands)
 
             elif state == "finished" and winner == "computer":
-
-                print(f"Your final hand: {player_hand}, your final score: {sum(player_hand)}")
-                print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
+                print(current_hands)
                 print("You lose!")
             
             elif state == "finished" and winner == "player":
-                print(f"Your final hand: {player_hand}, your final score: {sum(player_hand)}")
-                print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
+                print(current_hands)
                 print("You win!")
             
             else:
-                print(f"Your final hand: {player_hand}, your final score: {sum(player_hand)}")
-                print(f"Computer's final hand {computer_hand}, computer's final score: {sum(computer_hand)}")
+                print(current_hands)
                 print("It's a draw!")
                 
 
@@ -70,14 +63,17 @@ while continue_playing:
             draw(computer_hand)
    
 
-        status("first")
+        status("ongoing")
 
         to_continue = True
 
         while to_continue:
             
-            if len(player_hand) == 2 and sum(player_hand) == 21:
-                print("\nYour score: BLACKJACK!")
+            if len(player_hand) == 2 and sum(player_hand) == 21 and len(computer_hand) == 2 and sum(computer_hand) == 21:
+                status("draw")
+            
+            elif len(player_hand) == 2 and sum(player_hand) == 21:
+                status("finished", "player")
 
             another_card = input("Type 'y' to get another card, type 'n' to pass: \n")
 
@@ -107,22 +103,16 @@ while continue_playing:
             else: # continue = yes
                 draw(player_hand)
 
-                if sum(player_hand) > 21:
-                    if 11 in player_hand: #if 11 in hand and over 21, change it to 1.
-                        location = player_hand.index(11)
-                        player_hand[location] = 1
+                if sum(player_hand) > 21 and 11 in player_hand:
 
-                        status("ongoing")
+                    location = player_hand.index(11)
+                    player_hand[location] = 1
 
-                    else:
+                    status("ongoing")
+
+                elif sum(player_hand) > 21:
                         
-                        status("finished", "computer")
-
-                        to_continue = False
-
-                elif sum(computer_hand) > 21:
-
-                    status("finished", "player")
+                    status("finished", "computer")
 
                     to_continue = False
                 
