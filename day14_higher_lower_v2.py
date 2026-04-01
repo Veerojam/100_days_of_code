@@ -17,40 +17,27 @@ instagram_followers = {
     "NASA, a space agency from the United States 10": 100_000_000,
 }
 
-insta_list = []
-for item in instagram_followers:
-    insta_list.append(item)
+insta_list = list(instagram_followers)
 
-
-def pick_from_list(one_or_two, previous_pick):
-    any_pick1 = random.choice(insta_list)
-    any_pick2 = random.choice(insta_list)
-
+def pick_random(one_or_two, previous_pick):
+    random_pick1 = random.choice(insta_list)
+    
     if one_or_two == 2:
-        while any_pick1 == any_pick2:
-            any_pick1 = random.choice(insta_list)
-        else:
-            return any_pick1, any_pick2
+        random_pick2 = random.choice(insta_list)
+        while random_pick1 == random_pick2:
+            random_pick1 = random.choice(insta_list)
+        return random_pick1, random_pick2
     else:
-        while any_pick1 == previous_pick:
-            any_pick1 = random.choice(insta_list)
-        else:
-            return any_pick1
+        while random_pick1 == previous_pick:
+            random_pick1 = random.choice(insta_list)
+        return random_pick1
 
 
-# if else statemente saab paremaks muuta, prolly ära kaotada osad
-
-def a_or_b(user_answer, A, B):
-    if user_answer == "A":
-        if instagram_followers[A] > instagram_followers[B]:
-            return True
-        else:
-            return False
-    elif user_answer == "B":
-        if instagram_followers[B] > instagram_followers[A]:
-            return True
-        else:
-            return False
+def a_or_b(A, B):
+            if instagram_followers[A] > instagram_followers[B]:
+                return "A"
+            else:
+                return "B"
 
 
 def the_game(A, B):
@@ -58,14 +45,14 @@ def the_game(A, B):
 
     while True:
         print(f"Compare A: {B}")
-        A = pick_from_list(1, B)
+        A = pick_random(1, B)
         print(f"Against B: {A}")
 
-        answer = input("\nWho has more followers? Type 'A' or 'B': ")
+        answer = input("\nWho has more followers? Type 'A' or 'B': ").upper()
 
-        right_or_wrong = a_or_b(answer, B, A)
+        correct = a_or_b(B, A)
 
-        if right_or_wrong == True:
+        if correct == answer:
             score += 1
             print(f"You're right! Your current score is: {score}")
             B = A
@@ -74,19 +61,15 @@ def the_game(A, B):
             break
 
 
-A, B = pick_from_list(2, None)
+A, B = pick_random(2, None)
+
 print(f"Compare A: {A}")
 print(f"Against B: {B}")
 answer = input("\nWho has more followers? Type 'A' or 'B': ").upper()
+correct = a_or_b(A, B)
 
-
-first_pick = a_or_b(answer, A, B)
-
-
-if first_pick == True:
+if answer == correct:
     print(f"You're right! Your current score is: 1")
     the_game(A, B)
 else:
     print("You lost with the first try, good one bruv!")
-
-
