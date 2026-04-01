@@ -1,21 +1,10 @@
 
 import random
+from art import logo, vs
+from game_data import instagram_followers, data_list
 
-# logo = "higher/lower"
-# print(logo)
+print(logo)
 
-instagram_followers = {
-    "Cristiano Ronaldo, a footballer from Portugal 1": 672_000_000,
-    "Lionel Messi, a footballer from Argentina 2": 504_000_000,
-    "Selena Gomez, a singer and actress from the United States 3": 420_000_000,
-    "Dwayne 'The Rock' Johnson, an actor and wrestler from the United States 4": 391_000_000,
-    "Beyoncé, a singer and performer from the United States 5": 319_000_000,
-    "Nike, a sportswear brand from the United States 6": 304_000_000,
-    "Taylor Swift, a singer-songwriter from the United States 7": 284_000_000,
-    "National Geographic, a nature and science magazine from the United States 8": 281_000_000,
-    "Zendaya, an actress and fashion icon from the United States 9": 177_000_000,
-    "NASA, a space agency from the United States 10": 100_000_000,
-}
 
 insta_list = list(instagram_followers)
 
