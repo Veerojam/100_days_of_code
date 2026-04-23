@@ -1,11 +1,7 @@
 
-from day15_resources import resources
+from day15_resources import resources_in_machine, resources_per_coffee
 
-# Coin operated
-# Coins = Penny 0.01, Nickel 0.05, Dime 0.10, Quarter 0.25
-# what would you like? Espresso, Latte, Cappuccino
 # or if user enters 'report' it will print report
-# report has water 300 ml, milk 200 ml, coffee 100g, money 0$
 # 1. Print report 
 # 2. Check resources sufficient?
 # 3. Process coins
@@ -14,43 +10,78 @@ from day15_resources import resources
 # 5. Make coffee
 
 
-#coffee_type = input("What would you like? Espresso, Latte, or Cappuccino: ").lower()
+coffee_type = input("What would you like? Espresso, Latte, or Cappuccino: ").lower()
 
 def report():
-    print(resources).items()
+    for resource, details in resources_in_machine.items():
+        print(f"{resource}: {details['amount']}{details['unit']}")
+
+def calc_money():
+    print("Please insert coins!")
+    quarters = int(input("How many quarters? ")) * 0.25 # Quarter 0.25
+    dimes = int(input("How many dimes? ")) * 0.1 # Dime 0.10
+    nickles = int(input("How many nickles? ")) * 0.05 # Nickel 0.05
+    pennies = int(input("How many pennies? ")) * 0.01 # Penny 0.01
+
+    cash = quarters + dimes + nickles + pennies
+
+    #raha tagasi ja ülejäänu lisa resources alla
+    #cash_back = cash - price_coffee
+    resources_in_machine["money"]["amount"] += cash
+
+    #print(resources_in_machine["money"]["amount"])
+
+
 
 def take_resources():
-    if coffee_type == "espresso":
-        water -= 1
-        milk -= 1
-        coffee -= 1
-        money -= 1
-
-    elif coffee_type == "latte":
-        water -= 1
-        milk -= 1
-        coffee -= 1
-        money -= 1
-
-    elif coffee_type == "cappuccino":
-        water -= 1
-        milk -= 1
-        coffee -= 1
-        money -= 1
     
-    elif coffee_type == "off":
-        print("Your watch has ended")
+    price_espresso = resources_per_coffee["espresso"]["price"]
+    
+    price_cappuccino = resources_per_coffee["cappuccino"]["price"]
 
-    else:
-        report
+    price_latte = resources_per_coffee["latte"]["price"]
 
+    # need tõsta välja funktsioonist
+        
+    # print(price_latte, price_espresso, price_cappuccino)
+    
+
+    if coffee_type == "espresso":
+        calc_money()
+        if resources_in_machine["money"]["amount"] >= price_espresso: 
+            resources_in_machine["money"]["amount"] = resources_in_machine["money"]["amount"] - price_espresso
+        else:
+            print("Not enough money.")
+    elif coffee_type == "cappuccino":
+        calc_money()
+        if resources_in_machine["money"]["amount"] >= price_cappuccino: 
+            resources_in_machine["money"]["amount"] = resources_in_machine["money"]["amount"] - price_cappuccino
+        else:
+            print("Not enough money.")
+    elif coffee_type == "latte":
+        calc_money()
+        if resources_in_machine["money"]["amount"] >= price_latte: 
+            resources_in_machine["money"]["amount"] = resources_in_machine["money"]["amount"]- price_latte
+        else:
+            print("Not enough money.")
+    # siin kordan kalkulatsiooni, saab ehk lihtsustada
+    elif coffee_type == "report":
+        report()
+
+def money_back():
+    #here is ... in change
+    cash_back = round(resources_in_machine['money']['amount'], 2)
+    print(f"Here is {cash_back}$ back! Enjoy your coffee.")
+    resources_in_machine["money"]["amount"] = resources_in_machine["money"]["amount"] - resources_in_machine["money"]["amount"]
+
+#calc_money()
+take_resources()
+print(resources_in_machine["money"]["amount"])
+money_back()
 # def check_resources()
 #     asd
 
-#report()
+# report()
+#calc_money()
 
-print(resources.items())
-
-
-
-
+#print(resources["money"]["amount"])
