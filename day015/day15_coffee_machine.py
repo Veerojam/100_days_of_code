@@ -1,13 +1,5 @@
-
 from day15_resources import resources_in_machine, resources_per_coffee
 
-# or if user enters 'report' it will print report
-# 1. Print report 
-# 2. Check resources sufficient?
-# 3. Process coins
-# 4. Check transaction successful?
-    # 4.1 Refund
-# 5. Make coffee
 
 
 coffee_type = input("What would you like? Espresso, Latte, or Cappuccino: ").lower()
@@ -15,6 +7,7 @@ coffee_type = input("What would you like? Espresso, Latte, or Cappuccino: ").low
 def report():
     for resource, details in resources_in_machine.items():
         print(f"{resource}: {details['amount']}{details['unit']}")
+
 
 def calc_money():
     print("Please insert coins!")
@@ -29,22 +22,29 @@ def calc_money():
     #cash_back = cash - price_coffee
     resources_in_machine["money"]["amount"] += cash
 
-    #print(resources_in_machine["money"]["amount"])
 
+def check_resources():
+    if coffee_type == "espresso":
+        #Think about comparing each resource in resources_per_coffee["espresso"] against the matching resource in resources_in_machine. A for loop over the dictionary keys would let you check every resource without writing separate if statements for each one.
+
+        for amount in resources_in_machine.items():
+            print(amount)
+
+    #     if resources_in_machine["water"]["amount"]: #water, coffee, milk, money
+
+    # elif coffee_type == "cappuccino":
+    #     asd
+    # elif coffee_type == "latte":
+    #     asd
 
 
 def take_resources():
     
     price_espresso = resources_per_coffee["espresso"]["price"]
-    
     price_cappuccino = resources_per_coffee["cappuccino"]["price"]
-
     price_latte = resources_per_coffee["latte"]["price"]
 
     # need tõsta välja funktsioonist
-        
-    # print(price_latte, price_espresso, price_cappuccino)
-    
 
     if coffee_type == "espresso":
         calc_money()
@@ -67,6 +67,8 @@ def take_resources():
     # siin kordan kalkulatsiooni, saab ehk lihtsustada
     elif coffee_type == "report":
         report()
+    elif coffee_type == "off":
+        exit #this still prints cashback
 
 def money_back():
     #here is ... in change
@@ -74,14 +76,8 @@ def money_back():
     print(f"Here is {cash_back}$ back! Enjoy your coffee.")
     resources_in_machine["money"]["amount"] = resources_in_machine["money"]["amount"] - resources_in_machine["money"]["amount"]
 
-#calc_money()
-take_resources()
-print(resources_in_machine["money"]["amount"])
-money_back()
-# def check_resources()
-#     asd
 
-# report()
-#calc_money()
+# take_resources()
+# money_back()
 
-#print(resources["money"]["amount"])
+check_resources()
