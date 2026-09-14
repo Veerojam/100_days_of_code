@@ -11,7 +11,6 @@ class Paddle:
         self.paddle.penup()
         self.paddle.shapesize(stretch_wid=5, stretch_len=1)
         self.paddle.goto(x_cor, y_cor)
-        self.ball_has_bounced = False
 
     def go_up(self):
         new_y = self.paddle.ycor() + MOVE_DISTANCE

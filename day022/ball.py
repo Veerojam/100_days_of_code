@@ -10,29 +10,31 @@ class Ball(Turtle):
         self.shape("circle")
         self.color(BALL_COLOR)
         self.penup()
-        self.y_step_size = -15
-        self.x_step_size = -10
-        self.left_ball_has_bounced = False
-        self.right_ball_has_bounced = False
+        self.y_step_size = 10
+        self.x_step_size = 10
+
+    def change_x_direction(self):
+        self.x_step_size *= -1
+
+    def change_y_direction(self):
+        self.y_step_size *= -1
 
     def move(self):
         self.goto(self.xcor() + self.x_step_size, self.ycor() + self.y_step_size)
 
-
     def collision_w_paddle(self, paddle):
-        if self.distance(paddle.paddle) < 30 and paddle.ball_has_bounced == False:
-            print("collision with paddle")
-            self.y_step_size *= -1
-            self.x_step_size *= -1
-            paddle.ball_has_bounced = True
-            if self.distance(paddle.paddle) > 30:
-                paddle.ball_has_bounced = False
-
+        # if self.ycor() > paddle.paddle.ycor() - 50 and self.ycor() < paddle.paddle.ycor() + 50 and self.xcor() > paddle.paddle.xcor() - 15 and self.xcor() < paddle.paddle.xcor() + 15:
+        #     self.change_x_direction()
+        if self.distance(paddle.paddle) < 55 and (self.xcor() > 320 or self.xcor() < -320):
+            self.change_x_direction()
 
     def miss_paddle(self):
         pass
 
     def collision_w_wall(self):
         if self.ycor() < -280 or self.ycor() > 280:
-            print("collision with wall")
-            self.y_step_size *= -1
+            self.change_y_direction()
+
+
+
+#   GET AN UDNERSTANDING OF HOW CURRENT COLLISION WITH PADDLE WORKS
