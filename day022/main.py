@@ -3,6 +3,8 @@ from paddle import Paddle
 from ball import Ball
 import time
 
+SLEEP_TIME = 0.1
+
 screen = Screen()
 screen.setup(width=800, height=600)
 screen.bgcolor("black")
@@ -28,7 +30,7 @@ screen.onkey(left_paddle.go_down, "s")
 game_is_on = True
 
 while game_is_on:
-    time.sleep(0.1)
+    time.sleep(SLEEP_TIME)
     screen.update()
     ball.move()
     ball.collision_w_paddle(left_paddle)
@@ -38,3 +40,4 @@ while game_is_on:
 
 
 screen.exitonclick()
+
