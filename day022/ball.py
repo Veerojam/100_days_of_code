@@ -3,30 +3,36 @@ import random
 
 BALL_COLOR = "blue"
 
-class Ball:
+class Ball(Turtle):
 
     def __init__(self):
-        self.ball = Turtle("circle")
-        self.ball.color(BALL_COLOR)
-        self.ball.penup()
-        random_y = random.randint(-280, 280)
-        #random_heading = random.choice
-        self.ball.setpos(0, random_y)
-        
+        super().__init__()
+        self.shape("circle")
+        self.color(BALL_COLOR)
+        self.penup()
+        self.y_step_size = -15
+        self.x_step_size = -10
+        self.left_ball_has_bounced = False
+        self.right_ball_has_bounced = False
 
-    def move_ball(self):
-        self.ball.setheading(90)
-        #self.ball.fd(1)
-        # new_y = self.ball.ycor() - MOVE_DISTANCE
-        # new_x = self.ball.xcor() - MOVE_DISTANCE
-        # self.ball.goto(self.ball.xcor(), new_y)
+    def move(self):
+        self.goto(self.xcor() + self.x_step_size, self.ycor() + self.y_step_size)
 
-    def collision_w_paddle(self):
-        #if distance()
-        pass
+
+    def collision_w_paddle(self, paddle):
+        if self.distance(paddle.paddle) < 30 and paddle.ball_has_bounced == False:
+            print("collision with paddle")
+            self.y_step_size *= -1
+            self.x_step_size *= -1
+            paddle.ball_has_bounced = True
+            if self.distance(paddle.paddle) > 30:
+                paddle.ball_has_bounced = False
+
 
     def miss_paddle(self):
         pass
 
     def collision_w_wall(self):
-        pass
+        if self.ycor() < -280 or self.ycor() > 280:
+            print("collision with wall")
+            self.y_step_size *= -1
