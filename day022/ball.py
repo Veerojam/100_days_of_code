@@ -12,6 +12,7 @@ class Ball(Turtle):
         self.penup()
         self.y_step_size = 10
         self.x_step_size = 10
+        self.speed = 0.1
 
     def change_x_direction(self):
         self.x_step_size *= -1
@@ -27,10 +28,25 @@ class Ball(Turtle):
         #     self.change_x_direction()
         if self.distance(paddle.paddle) < 55 and (self.xcor() > 320 or self.xcor() < -320):
             self.change_x_direction()
+            self.speed *= 0.9
+            return True
 
-    def miss_paddle(self):
-        pass
+    def reset_position(self):
+        self.goto(0,0)
+        self.change_x_direction()
+        self.speed = 0.1
+        
 
+    def miss_left_paddle(self):
+        if self.xcor() < -400:
+            self.reset_position()
+            return True
+
+    def miss_right_paddle(self):
+        if self.xcor() > 400:
+            self.reset_position()
+            return True
+        
     def collision_w_wall(self):
         if self.ycor() < -280 or self.ycor() > 280:
             self.change_y_direction()
