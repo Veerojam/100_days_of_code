@@ -26,7 +26,7 @@ jobs:
           - name: Run tests
             run: echo "npm test" #although the test doesnt exist yet.
 
-    deploy:
+    build:
       needs: test #clarify that deploy job needs test job to have finished first. Wrap in brackets for multiple i.e [test, test2, smth]
       runs-on: ubuntu-latest
       steps:
@@ -42,8 +42,19 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: dist-files
-            path: |
+            path: | #which of the artifacts will be uploaded:
               dist
               package.json
+
+    deploy:
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
+        - name: Get build artifacts
+          uses: actions/download-artifact@v4 #downloads the artifacts uploaded in the previous job
+          with:
+            name: dist-files
+        - name: Output contents
+          run: ls
         - name: Deploy
           run: echo "Deploying..."
