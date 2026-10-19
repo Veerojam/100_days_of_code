@@ -1,0 +1,26 @@
+name: Deploy Project
+on: push
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Get code #downloads the code to the ubuntu machine
+            uses: actions/checkout@v3
+          - name: Install dependencies
+            run: echo "npm ci" # npm ci needs a package-lock.json in the repo
+          - name: Run tests
+            run: echo "npm test" #although the test doesnt exist yet.
+
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Get code #downloads the code to the ubuntu machine
+          uses: actions/checkout@v3
+        - name: Install dependencies
+          run: echo "npm ci" # npm ci needs a package-lock.json in the repo
+        - name: Run tests
+          run: echo "npm test"
+        - name: Build project
+          run: echo "npm build"
+        - name: Deploy
+          run: echo "Deploying..."
