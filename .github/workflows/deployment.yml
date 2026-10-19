@@ -3,65 +3,75 @@ on:
   pull_request:
     types:
       - opened #in this case, PR needs to be opened. Simply pushing wont work
-  workflow_dispatch: 
+  workflow_dispatch:
   push:
-    branches: 
+    branches:
       - main
-      - 'dev-*' # all branches that start with dev-
-      - 'feat/**' # feat/new or feat/new/button - works with fwd slashes
+      - "dev-*" # all branches that start with dev-
+      - "feat/**" # feat/new or feat/new/button - works with fwd slashes
     # paths: # the push will workflow will only be triggered if atleast one file changed in the workflows folder (and we targeted one of the branches)
-    #   - '**.py' 
+    #   - '**.py'
     #   - '.github/workflows/*'
     # paths-ignore: # the push will workflow will only be triggered if we target one of the branches, but we DIDNT change a file in the workflows folder
     #   - '**.py'
     #   - '.github/workflows/*'
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Get code #downloads the code to the ubuntu machine
-            uses: actions/checkout@v3
-          - name: Install dependencies
-            run: echo "npm ci" # npm ci needs a package-lock.json in the repo
-          - name: Run tests
-            run: echo "npm test" #although the test doesnt exist yet.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code #downloads the code to the ubuntu machine
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm #this is for nodejs dependency, python has a diff one. Check docs for more.
+          key: deps-node-modules-${{ hashFiles('**/package-lock/json') }}
+      - name: Install dependencies
+        run: echo "npm ci" # npm ci needs a package-lock.json in the repo
+      - name: Run tests
+        run: echo "npm test" #although the test doesnt exist yet.
 
-    build:
-      needs: test #clarify that deploy job needs test job to have finished first. Wrap in brackets for multiple i.e [test, test2, smth]
-      runs-on: ubuntu-latest
-      outputs:
-        script-file: ${{ steps.publish.outputs.script-file }}
-      steps:
-        - name: Get code #downloads the code to the ubuntu machine
-          uses: actions/checkout@v3
-        - name: Install dependencies
-          run: echo "npm ci" # npm ci needs a package-lock.json in the repo
-        - name: Run tests
-          run: echo "npm test"
-        - name: Build project
-          run: echo "npm build"
-        - name: Publish JS filename
-          id: publish
-          run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB-OUTPUT ';' #find the JS file, script-file is the output for THIS STEP, not global. However, I need it to access it above (outputs)
-        - name: Upload artifacts
-          uses: actions/upload-artifact@v4
-          with:
-            name: dist-files
-            path: | #which of the artifacts will be uploaded:
-              dist
-              package.json
+  build:
+    needs: test #clarify that deploy job needs test job to have finished first. Wrap in brackets for multiple i.e [test, test2, smth]
+    runs-on: ubuntu-latest
+    outputs:
+      script-file: ${{ steps.publish.outputs.script-file }}
+    steps:
+      - name: Get code #downloads the code to the ubuntu machine
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v6
+        with:
+          path: ~/.npm #this is for nodejs dependency, python has a diff one. Check docs for more.
+          key: deps-node-modules-${{ hashFiles('**/package-lock/json') }}
+      - name: Install dependencies
+        run: echo "npm ci" # npm ci needs a package-lock.json in the repo
+      - name: Run tests
+        run: echo "npm test"
+      - name: Build project
+        run: echo "npm build"
+      - name: Publish JS filename
+        id: publish
+        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB-OUTPUT ';' #find the JS file, script-file is the output for THIS STEP, not global. However, I need it to access it above (outputs)
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: | #which of the artifacts will be uploaded:
+            dist
+            package.json
 
-    deploy:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - name: Get build artifacts
-          uses: actions/download-artifact@v4 #downloads the artifacts uploaded in the previous job
-          with:
-            name: dist-files
-        - name: Output contents
-          run: ls
-        - name: Output filename
-          run: echo "${{ needs.build.outputs.script-file }}" #print the script file from the previous job
-        - name: Deploy
-          run: echo "Deploying..."
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4 #downloads the artifacts uploaded in the previous job
+        with:
+          name: dist-files
+      - name: Output contents
+        run: ls
+      - name: Output filename
+        run: echo "${{ needs.build.outputs.script-file }}" #print the script file from the previous job
+      - name: Deploy
+        run: echo "Deploying..."
