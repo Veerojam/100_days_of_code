@@ -1,5 +1,20 @@
 name: Deploy Project
-on: [push, workflow_dispatch]
+on:
+  pull_request:
+    types:
+      - opened #in this case, PR needs to be opened. Simply pushing wont work
+  workflow_dispatch: 
+  push:
+    branches: 
+      - main
+      - 'dev-*' # all branches that start with dev-
+      - 'feat/**' # feat/new or feat/new/button - works with fwd slashes
+    # paths: # the push will workflow will only be triggered if atleast one file changed in the workflows folder (and we targeted one of the branches)
+    #   - '**.py' 
+    #   - '.github/workflows/*'
+    # paths-ignore: # the push will workflow will only be triggered if we target one of the branches, but we DIDNT change a file in the workflows folder
+    #   - '**.py'
+    #   - '.github/workflows/*'
 jobs:
     test:
         runs-on: ubuntu-latest
@@ -23,5 +38,12 @@ jobs:
           run: echo "npm test"
         - name: Build project
           run: echo "npm build"
+        - name: Upload artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: dist-files
+            path: |
+              dist
+              package.json
         - name: Deploy
           run: echo "Deploying..."
