@@ -12,6 +12,7 @@ jobs:
             run: echo "npm test" #although the test doesnt exist yet.
 
     deploy:
+      needs: test #clarify that deploy job needs test job to have finished first. Wrap in brackets for multiple i.e [test, test2, smth]
       runs-on: ubuntu-latest
       steps:
         - name: Get code #downloads the code to the ubuntu machine
