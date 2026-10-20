@@ -15,8 +15,15 @@ on:
     # paths-ignore: # the push will workflow will only be triggered if we target one of the branches, but we DIDNT change a file in the workflows folder
     #   - '**.py'
     #   - '.github/workflows/*'
+env:
+  MONGODB_DB_NAME: gha-demo # this is a global variable (not inside a job)
 jobs:
   test:
+    env: #these are related to the "test" job, not global variables
+      MONGODB_CLUSTER_ADDRESS: cluster0.15pwqcc.mongodb.net
+      MONGODB_USERNAME: username123
+      MONGODB_PASSWORD: smthsmthsmth
+      PORT: 8080
     runs-on: ubuntu-latest
     steps:
       - name: Get code #downloads the code to the ubuntu machine
@@ -25,11 +32,15 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.npm #this is for nodejs dependency, python has a diff one. Check docs for more.
-          key: deps-node-modules-${{ hashFiles('**/package-lock/json') }}
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: echo "npm ci" # npm ci needs a package-lock.json in the repo
+      - name: Run server
+        run: npm start & npx wait-on http://127.0.0.1:$PORT # This is for a Linux machine. Different for e.g Windows machine
       - name: Run tests
-        run: echo "npm test" #although the test doesnt exist yet.
+        run: echo "npm test" #the test doesnt exist
+      - name: Output information
+        run: echo "MONGODB_USERNAME:$MONGODB_USERNAME"
 
   build:
     needs: test #clarify that deploy job needs test job to have finished first. Wrap in brackets for multiple i.e [test, test2, smth]
@@ -43,7 +54,7 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.npm #this is for nodejs dependency, python has a diff one. Check docs for more.
-          key: deps-node-modules-${{ hashFiles('**/package-lock/json') }}
+          key: deps-node-modules-${{ hashFiles('**/package-lock/json') }} # add a dynamic value (hash) so if dependencies are updates, old ones arent used. Otherwise the value doesnt change and it's using old caches values.
       - name: Install dependencies
         run: echo "npm ci" # npm ci needs a package-lock.json in the repo
       - name: Run tests
