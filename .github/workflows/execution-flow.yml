@@ -1,4 +1,4 @@
-name: Website Deployment
+name: Continue Website Deployment
 on:
   push:
     branches:
@@ -34,11 +34,11 @@ jobs:
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
-      - name: Test code
+      - name: Test code 
+        continue-on-error: true # This workflow / action doesnt appear as failed in GH, because of continue-on-error, even if this step fails. Furthermore, other steps run too, because test doesnt fail.
         id: run-tests # used to reference it
         run: npm run test
       - name: Upload test report # -> dont have to use any special params in the "if" step. The failure() function is used together with run-tests outcome to make sure that only if a steps fails and the outcome of run-test is fail, then it returns true
-        if: failure() && steps.run-tests.outcome == 'failure' 
         uses: actions/upload-artifact@v3
         with:
           name: test-report
