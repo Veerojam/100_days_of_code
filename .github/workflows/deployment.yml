@@ -21,8 +21,8 @@ jobs:
   test:
     env: #these are related to the "test" job, not global variables
       MONGODB_CLUSTER_ADDRESS: cluster0.15pwqcc.mongodb.net
-      MONGODB_USERNAME: username123
-      MONGODB_PASSWORD: smthsmthsmth
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }} #taken from repo secrets on GH
       PORT: 8080
     runs-on: ubuntu-latest
     steps:
