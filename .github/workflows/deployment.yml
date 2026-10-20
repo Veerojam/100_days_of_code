@@ -19,9 +19,10 @@ env:
   MONGODB_DB_NAME: gha-demo # this is a global variable (not inside a job)
 jobs:
   test:
+    environment: Test #environment from GH
     env: #these are related to the "test" job, not global variables
       MONGODB_CLUSTER_ADDRESS: cluster0.15pwqcc.mongodb.net
-      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }} #this is taken from the "test" environment as specified above
       MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }} #taken from repo secrets on GH
       PORT: 8080
     runs-on: ubuntu-latest
