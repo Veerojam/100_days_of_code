@@ -65,7 +65,7 @@ jobs:
         id: publish
         run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> $GITHUB-OUTPUT ';' #find the JS file, script-file is the output for THIS STEP, not global. However, I need it to access it above (outputs)
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist-files
           path: | #which of the artifacts will be uploaded:
