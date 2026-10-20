@@ -13,9 +13,10 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
+      - name: Install dependencies # -> cache output returns true or false. So if it's not true, then we want to install dependencies.
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint code
         run: npm run lint
@@ -28,9 +29,10 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test code
         id: run-tests # used to reference it
@@ -51,9 +53,10 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build website
         id: build-website
@@ -76,11 +79,11 @@ jobs:
       - name: Deploy
         run: echo "Deploying..."
   report:
-    needs: [lint, deploy]
+    needs: [lint, deploy] # -> if lint or test fails, report will run (because deploy depends on build and build depends on test)
     if: failure()
     runs-on: ubuntu-latest
     steps:
       - name: Output information
         run: |
          echo "Something went wrong"
-         echo "${{ github }}"
+         echo "${{ toJSON(github) }}"
