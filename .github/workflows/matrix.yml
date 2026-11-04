@@ -2,10 +2,17 @@ name: Matrix Demo
 on: push
 jobs:
   build:
+    continue-on-error: true
     strategy:
       matrix: # any different values (node-version, operating-system etc)
         node-version: [12, 14, 16] 
         operating-system: [ubuntu-latest, windows-latest] #will run in parallel
+        include: # means that it will run node v12-16 on ubuntu and windows, but 18 will run on ubuntu-latest
+          - node-version: 18
+            operating-system: ubuntu-latest
+        exclude: #node v12 wont be used with windows-latest
+          - node-version: 12
+            operating-system: windows-latest 
     runs-on: ${{ matrix.operating-system }}
     steps:
       - name: Get Code
